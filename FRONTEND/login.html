@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - AI Smart Campus</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <h2>Student Login</h2>
+
+  <form onsubmit="login(event)">
+    <input type="email" id="email" placeholder="Enter Email" required><br><br>
+    <input type="password" id="password" placeholder="Enter Password" required><br><br>
+    <button type="submit">Login</button>
+  </form>
+
+  <p id="message"></p>
+
+  <script>
+    async function login(e) {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          document.getElementById("message").innerText = "Login Successful!";
+          window.location.href = "index.html";
+        } else {
+          document.getElementById("message").innerText = data.message;
+        }
+      } catch (err) {
+        document.getElementById("message").innerText = "Server error!";
+      }
+    }
+  </script>
+
+</body>
+</html>
