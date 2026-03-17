@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <h1>Admin Dashboard</h1>
+
+  <!-- ADD EVENT -->
+  <h2>Add Event</h2>
+  <form onsubmit="addEvent(event)">
+    <input type="text" id="eventTitle" placeholder="Event Title" required><br><br>
+    <input type="date" id="eventDate" required><br><br>
+    <textarea id="eventDesc" placeholder="Description"></textarea><br><br>
+    <button type="submit">Add Event</button>
+  </form>
+
+  <hr>
+
+  <!-- ADD HACKATHON -->
+  <h2>Add Hackathon</h2>
+  <form onsubmit="addHackathon(event)">
+    <input type="text" id="hackName" placeholder="Hackathon Name" required><br><br>
+    <input type="text" id="hackPrize" placeholder="Prize" required><br><br>
+    <input type="date" id="hackDeadline" required><br><br>
+    <button type="submit">Add Hackathon</button>
+  </form>
+
+  <hr>
+
+  <!-- ADD CANTEEN ITEM -->
+  <h2>Add Canteen Item</h2>
+  <form onsubmit="addCanteen(event)">
+    <input type="text" id="itemName" placeholder="Item Name" required><br><br>
+    <input type="number" id="itemPrice" placeholder="Price" required><br><br>
+    <button type="submit">Add Item</button>
+  </form>
+
+  <p id="msg"></p>
+
+  <script>
+    const API = "http://localhost:5000/api";
+
+    // Add Event
+    async function addEvent(e) {
+      e.preventDefault();
+
+      const title = document.getElementById("eventTitle").value;
+      const date = document.getElementById("eventDate").value;
+      const description = document.getElementById("eventDesc").value;
+
+      const res = await fetch(`${API}/events`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, date, description })
+      });
+
+      const data = await res.json();
+      document.getElementById("msg").innerText = data.message;
+    }
+
+    // Add Hackathon
+    async function addHackathon(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("hackName").value;
+      const prize = document.getElementById("hackPrize").value;
+      const deadline = document.getElementById("hackDeadline").value;
+
+      const res = await fetch(`${API}/hackathons`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, prize, deadline })
+      });
+
+      const data = await res.json();
+      document.getElementById("msg").innerText = data.message;
+    }
+
+    // Add Canteen Item
+    async function addCanteen(e) {
+      e.preventDefault();
+
+      const item = document.getElementById("itemName").value;
+      const price = document.getElementById("itemPrice").value;
+
+      const res = await fetch(`${API}/canteen`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ item, price })
+      });
+
+      const data = await res.json();
+      document.getElementById("msg").innerText = data.message;
+    }
+  </script>
+
+</body>
+</html>
